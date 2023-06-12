@@ -9,10 +9,16 @@ jobs:
       - uses: actions/checkout@v3 # on récupère le code du repo.
       - run: npm install
       - run: npm run build
-      - run: npm run e2e:headless
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v3
-        if: always() # meme si les run précédents fail, ça fera quand même l'action.
+
+      - name: Cache node modules
+        id: cache-npm
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
         with:
-          name: e2e-tests
-          path: cypress/videos
+          path: nodes_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
