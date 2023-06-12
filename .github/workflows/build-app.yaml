@@ -50,4 +50,4 @@ jobs:
         with:
             ssh-private-key: ${{ secrets.SSH }}
 
-      - run: ssh ${{secrets.USER_AWS}}@${{ secrets.HOST}}
+      - run: ssh -i ${{ secrets.SSH }} ${{ secrets.USER_AWS }}@${{ secrets.HOST }}
