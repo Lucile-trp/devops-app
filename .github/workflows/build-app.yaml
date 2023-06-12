@@ -7,15 +7,17 @@ jobs:
     runs-on: ubuntu-latest #ou specifier la version souhaitée.
     steps:
       - uses: actions/checkout@v3 # on récupère le code du repo.
-      - run: npm install
-      - run: npm run build
-
-      - name: Cache NPM dependencies # (2)
         uses: actions/cache@v3
         id: npm-cache
         with:
-          path: node_modules
+          path: |
+            node_modules
+            /home/runner/.cache/Cypress
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - name : "Install depts & build"
+        run: |
+          npm install
+          npm run build
 
   test-app:
     needs: [build-app]
@@ -25,7 +27,9 @@ jobs:
       - uses: actions/cache@v3
         id: npm-cache
         with:
-          path: node_modules
+          path: |
+            node_modules
+            /home/runner/.cache/Cypress
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 
       - name: run tests
@@ -35,5 +39,5 @@ jobs:
         uses: actions/upload-artifact@v3
         if: always() # meme si les run précédents fail, ça fera quand même l'action.
         with:
-          #name: e2e-tests
-          path: cypress/videos/app.cy.ts.mp4
+          name: e2e-tests
+          path: cypress/videos
