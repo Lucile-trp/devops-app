@@ -10,3 +10,7 @@ jobs:
       - run: npm install
       - run: npm run build
       - run: npm run e2e:headless
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          path: cypress/videos/app.cy.ts.mp4
