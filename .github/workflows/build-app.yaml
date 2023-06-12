@@ -49,4 +49,4 @@ jobs:
       - uses: webfactory/ssh-agent@v0.7.0
         with:
             ssh-private-key: ${{ secrets.SSH }}
-      - run: ssh -o StrictHostKeyChecking=no ${{ secrets.USER_AWS }}@${{ secrets.HOST }} "cd /devops-app && git pull && npm run build && npm run start"
+      - run: ssh -o StrictHostKeyChecking=no ${{ secrets.USER_AWS }}@${{ secrets.HOST }} "cd devops-app && git pull && npm run build && npm run start"
