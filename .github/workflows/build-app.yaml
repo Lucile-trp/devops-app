@@ -12,23 +12,28 @@ jobs:
 
       - name: Cache NPM dependencies # (2)
         uses: actions/cache@v3
-        id: cache-primes
+        id: npm-cache
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 
   test-app:
     needs: [build-app]
     runs-on: ubuntu-latest #ou specifier la version souhaitée.
     steps:
       - uses: actions/checkout@v3 # on récupère le code du repo.
+      - uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
       - name: run tests
-        if: steps.cache-primes.outputs.cache-hit == 'true'
         run: npm run e2e:headless
 
       - name: Archive code coverage results
         uses: actions/upload-artifact@v3
-        #if: always() # meme si les run précédents fail, ça fera quand même l'action.
+        if: always() # meme si les run précédents fail, ça fera quand même l'action.
         with:
           #name: e2e-tests
           path: cypress/videos/app.cy.ts.mp4
