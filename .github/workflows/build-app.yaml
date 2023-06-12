@@ -12,5 +12,7 @@ jobs:
       - run: npm run e2e:headless
       - name: Archive code coverage results
         uses: actions/upload-artifact@v3
+        if: always() # meme si les run précédents fail, ça fera quand même l'action.
         with:
-          path: cypress/videos/app.cy.ts.mp4
+          name: e2e-tests
+          path: cypress/videos
