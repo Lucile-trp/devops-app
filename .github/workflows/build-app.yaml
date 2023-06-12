@@ -10,15 +10,9 @@ jobs:
       - run: npm install
       - run: npm run build
 
-      - name: Cache node modules
-        id: cache-npm
+      - name: Cache NPM dependencies # (2)
         uses: actions/cache@v3
-        env:
-          cache-name: cache-node-modules
+        id: cache-primes
         with:
-          path: nodes_modules
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
