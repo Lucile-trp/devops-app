@@ -20,27 +20,27 @@ jobs:
   #         npm run build
 
   # test-app:
-    needs: [build-app]
-    runs-on: ubuntu-latest #ou specifier la version souhaitée.
-    steps:
-      - uses: actions/checkout@v3 # on récupère le code du repo.
-      - uses: actions/cache@v3
-        id: npm-cache
-        with:
-          path: |
-            node_modules
-            /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+    # needs: [build-app]
+    # runs-on: ubuntu-latest #ou specifier la version souhaitée.
+    # steps:
+    #   - uses: actions/checkout@v3 # on récupère le code du repo.
+    #   - uses: actions/cache@v3
+    #     id: npm-cache
+    #     with:
+    #       path: |
+    #         node_modules
+    #         /home/runner/.cache/Cypress
+    #       key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 
-      - name: run tests
-        run: npm run e2e:headless
+    #   - name: run tests
+    #     run: npm run e2e:headless
 
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v3
-        if: always() # meme si les run précédents fail, ça fera quand même l'action.
-        with:
-          name: e2e-tests
-          path: cypress/videos
+    #   - name: Archive code coverage results
+    #     uses: actions/upload-artifact@v3
+    #     if: always() # meme si les run précédents fail, ça fera quand même l'action.
+    #     with:
+    #       name: e2e-tests
+    #       path: cypress/videos
 
   deploy: 
     runs-on: ubuntu-latest
