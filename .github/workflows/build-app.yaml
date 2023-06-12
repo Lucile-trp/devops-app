@@ -52,4 +52,4 @@ jobs:
           SSH_PORT: 3000
           SSH_USER: ${{ secrets.USER_AWS }}
           SSH_KEY: ${{ secrets.SSH }}
-      - run: ssh ${{ steps.ssh.outputs.SERVER }} pwd
+      - run: ssh -i ${{ secrets.SSH}} ${{secrets.USER_AWS}}@${{ secrets.HOST}}
