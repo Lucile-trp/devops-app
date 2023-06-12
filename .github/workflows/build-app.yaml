@@ -49,5 +49,4 @@ jobs:
       - uses: webfactory/ssh-agent@v0.7.0
         with:
             ssh-private-key: ${{ secrets.SSH }}
-
-      - run: ssh -i ${{ secrets.SSH }} ${{ secrets.USER_AWS }}@${{ secrets.HOST }}
+      - run: ssh -o StrictHostKeyChecking=no ${{ secrets.USER_AWS }}@${{ secrets.HOST }} "ls"
