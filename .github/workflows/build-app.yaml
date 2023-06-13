@@ -55,7 +55,7 @@ jobs:
   build-push-docker :
 
     runs-on: ubuntu-latest
-    need: build-app
+    needs: build-app
 
     permissions:
       contents: read
