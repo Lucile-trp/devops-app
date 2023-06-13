@@ -95,5 +95,5 @@ jobs:
       - uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.SSH }}
-      - run: ssh -o StrictHostKeyChecking=no ${{ secrets.USER_AWS }}@${{ secrets.HOST }} "docker pull ghcr.io/lucile-trp/devops-app/next-app:latest && docker compose up -d"
+      - run: ssh -o StrictHostKeyChecking=no ${{ secrets.USER_AWS }}@${{ secrets.HOST }} "docker pull ghcr.io/lucile-trp/devops-app/next-app:latest && docker compose -f docker-composer.prod.yaml up -d"
       
