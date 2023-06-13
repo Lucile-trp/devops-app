@@ -53,7 +53,9 @@ jobs:
   #     - run: ssh -o StrictHostKeyChecking=no ${{ secrets.USER_AWS }}@${{ secrets.HOST }} "cd devops-app && git fetch && git pull && npm i && npm run build && pm2 restart next-app"
       
   build-push-docker :
+
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
       packages: write
@@ -65,6 +67,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
       - uses: actions/checkout@v3
 
 
@@ -72,4 +75,4 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: ghcr.io/lucile-trp/next-app:latest
+          tags: ghcr.io/lucile-trp/devops-app/next-app:latest
