@@ -3,21 +3,21 @@ name: build-app
 on: [push]
 
 jobs:
-  # build-app:
-  #   runs-on: ubuntu-latest #ou specifier la version souhaitée.
-  #   steps:
-  #     - uses: actions/checkout@v3 # on récupère le code du repo.
-  #     - uses: actions/cache@v3
-  #       id: npm-cache
-  #       with:
-  #         path: |
-  #           node_modules
-  #           /home/runner/.cache/Cypress
-  #         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-  #     - name: "Install depts & build"
-  #       run: |
-  #         npm install
-  #         npm run build
+  build-app:
+    runs-on: ubuntu-latest #ou specifier la version souhaitée.
+    steps:
+      - uses: actions/checkout@v3 # on récupère le code du repo.
+      - uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: |
+            node_modules
+            /home/runner/.cache/Cypress
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - name: "Install depts & build"
+        run: |
+          npm install
+          npm run build
 
   # test-app:
   #   needs: [build-app]
@@ -55,6 +55,7 @@ jobs:
   build-push-docker :
 
     runs-on: ubuntu-latest
+    need: build-app
 
     permissions:
       contents: read
@@ -76,3 +77,13 @@ jobs:
         with:
           push: true
           tags: ghcr.io/lucile-trp/devops-app/next-app:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build-app, build-push-docker]
+    steps: 
+      - uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH }}
+      - run: ssh -o StrictHostKeyChecking=no ${{ secrets.USER_AWS }}@${{ secrets.HOST }} "docker pull ghcr.io/lucile-trp/devops-app/next-app:latest && docker stop next-app && docker rm next-app && docker run -d --name next-app -p 3000:3000 ghcr.io/lucile-trp/devops-app/next-app:latest"
+      
